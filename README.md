@@ -24,8 +24,9 @@ Un juego de memoria interactivo construido con **React**, usando un solo archivo
    ```bash
    git clone https://github.com/Nery2004/Lab-6-React.git
 2. **Abre el Juego desde tu terminal**:
-open Lab 6 React.html  # En macOS
-start Lab 6 React.html # En Windows
+   ```bash
+   open Lab 6 React.html  # En macOS
+   start Lab 6 React.html # En Windows
 
 3. **Disfruta**:
 
