@@ -17,7 +17,7 @@
       font-family: 'Arial', sans-serif;
       background: white;
       margin: 0;
-      padding: 20px;
+      padding: 10px;
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -27,8 +27,9 @@
     /* Contenedor principal del juego */
     .game-container {
       text-align: center;
-      max-width: 800px;
-      margin: 0 auto;
+      max-width: 100%;
+      margin: 10 auto;
+      margin-bottom: 30%;
     }
 
     /* Estilo del título */
@@ -41,7 +42,8 @@
     /* Estadísticas (movimientos y parejas encontradas) */
     .stats {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+      align-items: center;
       margin-bottom: 20px;
       background: rgba(255, 255, 255, 0.8);
       padding: 10px 20px;
@@ -53,6 +55,7 @@
       font-size: 18px;
       font-weight: bold;
       color: #2c3e50;
+      margin: 5px 0;
     }
     
     /* Cuadrícula de cartas */
@@ -66,7 +69,7 @@
     /* Estilos de cada carta */
     .card {
       position: relative;
-      width: 100%;
+      width: 80px;
       height: 120px;
       transform-style: preserve-3d;
       transition: transform 0.6s;
@@ -175,17 +178,36 @@
         height: 80px;
       }
     }
+
+      .footer {
+        width: 100%;
+        text-align: center;
+        padding: 20px;
+        background: #f1f1f1;
+        color: black;
+        font-size: 16px;
+        font-weight: bold;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        
+      }
+
+      .footer a {
+        text-decoration: none;
+        color: black;
+        transition: color 0.3s;
+      }
+
+      .footer a:hover {
+        color: blue;
+      }
+
   </style>
 </head>
 <body>
   <!-- Contenedor donde se montará el juego -->
   <div id="root"></div>
-
-  <!-- Enlace a tu repositorio de GitHub -->
-  <p style="text-align: center;text-decoration: dashed; margin-bottom: 20px;">
-    <a href="https://github.com/Nery2004/Lab-6-React">🔗 Enlace de github</a>
-  </p>
-
   <script type="text/babel">
     // Importar hooks de React
     const { useState, useEffect } = React;
@@ -280,7 +302,7 @@
       // Renderizar el juego
       return (
         <div className="game-container">
-          <h1>Juego de Memoria</h1>
+          <h1>Juego de Memoria 🧠 </h1>
           
           {/* Estadísticas */}
           <div className="stats">
@@ -327,5 +349,11 @@
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
   </script>
+<footer class="footer">
+    <!-- Enlace a tu repositorio de GitHub -->
+    <p style="text-align: center;text-decoration: dashed; margin-bottom: 20px;">
+      <a href="https://github.com/Nery2004/Lab-6-React">🔗 Enlace de github</a>
+    </p>   
+</footer>
 </body>
 </html>
