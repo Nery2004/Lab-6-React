@@ -10,7 +10,7 @@
   <style>
     body {
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      background: white;
       margin: 0;
       padding: 20px;
       min-height: 100vh;
@@ -89,7 +89,7 @@
     }
     
     .card-back {
-      background: linear-gradient(45deg, #c5c3c3, #f39c12);
+      background: linear-gradient(45deg, #e5b368, #f39c12);
       color: white;
     }
     
@@ -160,7 +160,7 @@
 </head>
 <body>
   <div id="root"></div>
-
+  <p style="text-align: center;text-decoration: dashed; margin-bottom: 20px;"><a href="https://github.com/Nery2004/Lab-6-React">🔗 Enlace de github</a></p>
   <script type="text/babel">
     const { useState, useEffect } = React;
 
@@ -197,16 +197,16 @@
         initializeGame();
       }, []);
       
-      // Efecto para comprobar si el juego está completo
+      // Efecto para comprobar si el juego esta completo
       useEffect(() => {
-        if (matched.length === 16) {
+        if (matched.length === 16) { //<-- Verifica que se encontraron todas las parejas
           setGameCompleted(true);
         }
       }, [matched]);
       
       // Manejar el clic en una carta
       const handleCardClick = (id) => {
-        // No hacer nada si la carta ya está volteada o emparejada, o si hay 2 cartas ya volteadas
+        // No hacer nada si la carta ya esta volteada o emparejada, o si hay 2 cartas ya volteadas
         if (disabled || flipped.length === 2 || cards.find(card => card.id === id).flipped || matched.includes(id)) {
           return;
         }
@@ -217,7 +217,7 @@
         );
         setCards(newCards);
         
-        // Añadir a las cartas volteadas
+        // agregar a las cartas volteadas
         const newFlipped = [...flipped, id];
         setFlipped(newFlipped);
         
@@ -236,7 +236,7 @@
             setFlipped([]);
             setDisabled(false);
           } else {
-            // No coinciden - voltear de nuevo después de un retraso
+            // No coinciden - voltear de nuevo despues de un retraso
             setTimeout(() => {
               setCards(newCards.map(card => 
                 newFlipped.includes(card.id) ? { ...card, flipped: false } : card
@@ -253,7 +253,7 @@
           <h1>Juego de Memoria</h1>
           
           <div className="stats">
-            <div className="stat">Movimientos: {moves}</div>
+            <div className="stat">Movimientos: {moves} </div>
             <div className="stat">Parejas encontradas: {matched.length / 2} / 8</div>
           </div>
           
