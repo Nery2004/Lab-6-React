@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- Configuración básica del documento -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Juego de Memoria</title>
+
+  <!-- Importar React, ReactDOM y Babel para usar JSX directamente en el navegador -->
   <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
   <style>
+    /* Estilos generales para el juego */
     body {
       font-family: 'Arial', sans-serif;
       background: white;
@@ -19,18 +24,21 @@
       align-items: center;
     }
     
+    /* Contenedor principal del juego */
     .game-container {
       text-align: center;
       max-width: 800px;
       margin: 0 auto;
     }
-    
+
+    /* Estilo del título */
     h1 {
       color: #2c3e50;
       margin-bottom: 20px;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
     }
     
+    /* Estadísticas (movimientos y parejas encontradas) */
     .stats {
       display: flex;
       justify-content: space-between;
@@ -47,13 +55,15 @@
       color: #2c3e50;
     }
     
+    /* Cuadrícula de cartas */
     .memory-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 15px;
-      perspective: 1000px;
+      perspective: 1000px; /* Añade perspectiva 3D */
     }
     
+    /* Estilos de cada carta */
     .card {
       position: relative;
       width: 100%;
@@ -65,15 +75,17 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
     
+    /* Carta volteada */
     .card.flipped {
       transform: rotateY(180deg);
     }
     
+    /* Caras de la carta */
     .card-face {
       position: absolute;
       width: 100%;
       height: 100%;
-      backface-visibility: hidden;
+      backface-visibility: hidden; /* Oculta la cara trasera */
       border-radius: 10px;
       display: flex;
       justify-content: center;
@@ -82,21 +94,25 @@
       font-weight: bold;
     }
     
+    /* Parte delantera de la carta (emoji) */
     .card-front {
       background: linear-gradient(45deg, #3498db, #9b59b6);
       color: white;
       transform: rotateY(180deg);
     }
-    
+
+    /* Parte trasera de la carta */
     .card-back {
       background: linear-gradient(45deg, #e5b368, #f39c12);
       color: white;
     }
-    
+
+    /* Carta que fue emparejada */
     .card.matched .card-front {
       background: linear-gradient(45deg, #2ecc71, #27ae60);
     }
-    
+
+    /* Pantalla de finalización */
     .completion-message {
       position: fixed;
       top: 0;
@@ -124,6 +140,7 @@
       margin-bottom: 30px;
     }
     
+    /* Botón para reiniciar el juego */
     .restart-button {
       padding: 12px 24px;
       font-size: 18px;
@@ -141,11 +158,13 @@
       transform: scale(1.05);
     }
     
+    /* Animación de aparición */
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
     
+    /* Estilos responsivos para móviles */
     @media (max-width: 768px) {
       .memory-grid {
         grid-template-columns: repeat(4, 1fr);
@@ -159,14 +178,24 @@
   </style>
 </head>
 <body>
+  <!-- Contenedor donde se montará el juego -->
   <div id="root"></div>
-  <p style="text-align: center;text-decoration: dashed; margin-bottom: 20px;"><a href="https://github.com/Nery2004/Lab-6-React">🔗 Enlace de github</a></p>
+
+  <!-- Enlace a tu repositorio de GitHub -->
+  <p style="text-align: center;text-decoration: dashed; margin-bottom: 20px;">
+    <a href="https://github.com/Nery2004/Lab-6-React">🔗 Enlace de github</a>
+  </p>
+
   <script type="text/babel">
+    // Importar hooks de React
     const { useState, useEffect } = React;
 
+    // Array de emojis usados para las cartas
     const emojis = ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦'];
     
+    // Componente principal del juego de memoria
     const MemoryGame = () => {
+      // Estado del juego
       const [cards, setCards] = useState([]);
       const [flipped, setFlipped] = useState([]);
       const [matched, setMatched] = useState([]);
@@ -174,7 +203,7 @@
       const [gameCompleted, setGameCompleted] = useState(false);
       const [disabled, setDisabled] = useState(false);
       
-      // Inicializar el juego
+      // Inicializar el juego mezclando las cartas
       const initializeGame = () => {
         const pairs = [...emojis.slice(0, 8), ...emojis.slice(0, 8)];
         const shuffled = pairs.sort(() => Math.random() - 0.5);
@@ -192,21 +221,21 @@
         setGameCompleted(false);
       };
       
-      // Efecto para inicializar el juego al montar el componente
+      // Inicializar el juego cuando se monta el componente
       useEffect(() => {
         initializeGame();
       }, []);
       
-      // Efecto para comprobar si el juego esta completo
+      // Verificar si el juego está completo
       useEffect(() => {
-        if (matched.length === 16) { //<-- Verifica que se encontraron todas las parejas
+        if (matched.length === 16) {
           setGameCompleted(true);
         }
       }, [matched]);
       
       // Manejar el clic en una carta
       const handleCardClick = (id) => {
-        // No hacer nada si la carta ya esta volteada o emparejada, o si hay 2 cartas ya volteadas
+        // Evitar errores al hacer clic en cartas inválidas o cuando 2 cartas ya están volteadas
         if (disabled || flipped.length === 2 || cards.find(card => card.id === id).flipped || matched.includes(id)) {
           return;
         }
@@ -217,26 +246,26 @@
         );
         setCards(newCards);
         
-        // agregar a las cartas volteadas
+        // Actualizar las cartas volteadas
         const newFlipped = [...flipped, id];
         setFlipped(newFlipped);
         
-        // Si hay 2 cartas volteadas, comprobar si coinciden
+        // Verificar si se voltearon 2 cartas
         if (newFlipped.length === 2) {
           setMoves(moves + 1);
-          setDisabled(true);
+          setDisabled(true); // Bloquear clics mientras se comparan
           
           const [firstId, secondId] = newFlipped;
           const firstCard = newCards.find(card => card.id === firstId);
           const secondCard = newCards.find(card => card.id === secondId);
           
           if (firstCard.emoji === secondCard.emoji) {
-            // Coinciden
+            // Si coinciden, añadir a las cartas emparejadas
             setMatched([...matched, firstId, secondId]);
             setFlipped([]);
             setDisabled(false);
           } else {
-            // No coinciden - voltear de nuevo despues de un retraso
+            // Si no coinciden, voltearlas de nuevo después de 1 segundo
             setTimeout(() => {
               setCards(newCards.map(card => 
                 newFlipped.includes(card.id) ? { ...card, flipped: false } : card
@@ -248,15 +277,18 @@
         }
       };
       
+      // Renderizar el juego
       return (
         <div className="game-container">
           <h1>Juego de Memoria</h1>
           
+          {/* Estadísticas */}
           <div className="stats">
             <div className="stat">Movimientos: {moves} </div>
             <div className="stat">Parejas encontradas: {matched.length / 2} / 8</div>
           </div>
           
+          {/* Cuadrícula de cartas */}
           <div className="memory-grid">
             {cards.map(card => (
               <div
@@ -272,6 +304,7 @@
             ))}
           </div>
           
+          {/* Mensaje de finalización */}
           {gameCompleted && (
             <div className="completion-message">
               <h2>¡Felicidades!</h2>
@@ -285,10 +318,12 @@
       );
     };
     
+    // Componente raíz que carga el MemoryGame
     const App = () => {
       return <MemoryGame />;
     };
     
+    // Montar el App en el div con id "root"
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
   </script>
